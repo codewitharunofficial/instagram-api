@@ -21,7 +21,7 @@ app.post("/user/:username", async (req, res) => {
 
     try {
       const { data } = await axios.request(options);
-       console.log(data);
+      
       if (data) {
         const imageBuffer = await axios.get(data[0]?.profile_pic_url, {
           responseType: "arraybuffer",
@@ -69,7 +69,7 @@ app.post("/stories/:username", async (req, res) => {
 
     try {
       const { data } = await axios.request(options);
-      console.log(data);
+      console.log("Stories:", data);
       res.status(200).send({
         success: true,
         message: "Stories Fetched Successfully",
