@@ -43,7 +43,7 @@ app.post("/user/:username", async (req, res) => {
             following: data[0]?.following_count,
             bio: data[0]?.biography,
             id: data[0]?.pk,
-            posts_count: data[0]?.media_count
+            posts_count: data[0]?.media_count,
           },
         });
       }
@@ -235,6 +235,45 @@ app.use("/post-details/:id", async (req, res) => {
         message: "Post Details Found",
         data,
       });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "Something went wrong",
+        error,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+});
+
+app.use("/post-comments/:shortcode", async (req, res) => {
+  try {
+    const { shortcode } = req.params;
+    console.log(shortcode);
+    const options = {
+      method: "GET",
+      url: `https://instagram243.p.rapidapi.com/postcomments/${shortcode}/%7Bend_cursor%7D`,
+      headers: {
+        "x-rapidapi-key": "63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1",
+        "x-rapidapi-host": "instagram243.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const { data } = await axios.request(options);
+      // console.log(data);
+      if (data) {
+        res.status(200).send({
+          success: true,
+          message: "Comments Fetching Successfull",
+          comments: data?.data,
+        });
+      }
     } catch (error) {
       res.status(500).send({
         success: false,
