@@ -24,6 +24,7 @@ app.post("/user/:username", async (req, res) => {
 
     try {
       const { data } = await axios.request(options);
+      // console.log(data);
 
       if (data) {
         const imageBuffer = await axios.get(data[0]?.profile_pic_url, {
@@ -44,6 +45,7 @@ app.post("/user/:username", async (req, res) => {
             bio: data[0]?.biography,
             id: data[0]?.pk,
             posts_count: data[0]?.media_count,
+            isPrivate: data[0]?.is_private,
           },
         });
       }
@@ -67,27 +69,27 @@ app.post("/stories/:username", async (req, res) => {
   try {
     const { username } = req.params;
     const options = {
-      method: "POST",
-      url: "https://instagram120.p.rapidapi.com/api/instagram/stories",
+      method: 'GET',
+      url: 'https://instagram-scraper-api2.p.rapidapi.com/v1/stories',
+      params: {
+        username_or_id_or_url: username
+      },
       headers: {
-        "x-rapidapi-key": "63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1",
-        "x-rapidapi-host": "instagram120.p.rapidapi.com",
-        "Content-Type": "application/json",
-      },
-      data: {
-        username: username,
-      },
+        'x-rapidapi-key': '63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1',
+        'x-rapidapi-host': 'instagram-scraper-api2.p.rapidapi.com'
+      }
     };
 
     try {
       const { data } = await axios.request(options);
-      console.log("Stories:", data);
+      // console.log("Stories:", data?.data?.items);
       res.status(200).send({
         success: true,
         message: "Stories Fetched Successfully",
-        stories: data,
+        stories: data?.data?.items,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).send({
         success: false,
         message: "Something went wrong",
@@ -184,12 +186,15 @@ app.use("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const options = {
-      method: "GET",
-      url: `https://instagram243.p.rapidapi.com/userposts/${id}/20/%7Bend_cursor%7D`,
-      headers: {
-        "x-rapidapi-key": "b1c26628e0msh3fbbf13ea24b4abp184561jsna2ebae86e910",
-        "x-rapidapi-host": "instagram243.p.rapidapi.com",
+      method: 'GET',
+      url: 'https://instagram-scraper-api2.p.rapidapi.com/v1.2/posts',
+      params: {
+        username_or_id_or_url: id
       },
+      headers: {
+        'x-rapidapi-key': 'b1c26628e0msh3fbbf13ea24b4abp184561jsna2ebae86e910',
+        'x-rapidapi-host': 'instagram-scraper-api2.p.rapidapi.com'
+      }
     };
 
     try {
