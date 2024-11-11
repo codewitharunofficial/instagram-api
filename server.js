@@ -69,15 +69,15 @@ app.post("/stories/:username", async (req, res) => {
   try {
     const { username } = req.params;
     const options = {
-      method: 'GET',
-      url: 'https://instagram-scraper-api2.p.rapidapi.com/v1/stories',
+      method: "GET",
+      url: "https://instagram-scraper-api2.p.rapidapi.com/v1/stories",
       params: {
-        username_or_id_or_url: username
+        username_or_id_or_url: username,
       },
       headers: {
-        'x-rapidapi-key': '63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1',
-        'x-rapidapi-host': 'instagram-scraper-api2.p.rapidapi.com'
-      }
+        "x-rapidapi-key": "63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1",
+        "x-rapidapi-host": "instagram-scraper-api2.p.rapidapi.com",
+      },
     };
 
     try {
@@ -186,15 +186,15 @@ app.use("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const options = {
-      method: 'GET',
-      url: 'https://instagram-scraper-api2.p.rapidapi.com/v1.2/posts',
+      method: "GET",
+      url: "https://instagram-scraper-api2.p.rapidapi.com/v1.2/posts",
       params: {
-        username_or_id_or_url: id
+        username_or_id_or_url: id,
       },
       headers: {
-        'x-rapidapi-key': 'b1c26628e0msh3fbbf13ea24b4abp184561jsna2ebae86e910',
-        'x-rapidapi-host': 'instagram-scraper-api2.p.rapidapi.com'
-      }
+        "x-rapidapi-key": "b1c26628e0msh3fbbf13ea24b4abp184561jsna2ebae86e910",
+        "x-rapidapi-host": "instagram-scraper-api2.p.rapidapi.com",
+      },
     };
 
     try {
@@ -287,6 +287,41 @@ app.use("/post-comments/:shortcode", async (req, res) => {
       });
     }
   } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+});
+
+app.use("/download-video/:url/:filename", async (req, res) => {
+  const {url, filename} = req.params;
+  try {
+    const videoBuffer = await axios.get(url, {responseType: 'stream'});
+    res.setHeader("Content-Disposition", `attachment; filename=${filename}.mp4`);
+    res.setHeader("Content-Type", "video/mp4");
+     videoBuffer.data?.pipe(res);
+  } catch (error) {
+   console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+});
+
+
+app.use("/download-image/:url/:filename", async (req, res) => {
+  const {url, filename} = req.params;
+  try {
+    const imageBuffer = await axios.get(url, {responseType: 'stream'});
+    res.setHeader("Content-Disposition", `attachment; filename=${filename}.jpeg`);
+    res.setHeader("Content-Type", "image/jpeg");
+     imageBuffer.data?.pipe(res);
+  } catch (error) {
+   console.log(error);
     res.status(500).send({
       success: false,
       message: "Something went wrong",
