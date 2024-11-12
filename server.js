@@ -264,12 +264,15 @@ app.use("/post-comments/:shortcode", async (req, res) => {
     const { shortcode } = req.params;
     console.log(shortcode);
     const options = {
-      method: "GET",
-      url: `https://instagram243.p.rapidapi.com/postcomments/${shortcode}/%7Bend_cursor%7D`,
-      headers: {
-        "x-rapidapi-key": "63082bf975mshaf2e4ae44199d66p180054jsne3e705022ef1",
-        "x-rapidapi-host": "instagram243.p.rapidapi.com",
+      method: 'GET',
+      url: 'https://instagram-scraper-api2.p.rapidapi.com/v1/comments',
+      params: {
+        code_or_id_or_url: shortcode
       },
+      headers: {
+        'x-rapidapi-key': 'b1c26628e0msh3fbbf13ea24b4abp184561jsna2ebae86e910',
+        'x-rapidapi-host': 'instagram-scraper-api2.p.rapidapi.com'
+      }
     };
 
     try {
