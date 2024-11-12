@@ -162,7 +162,7 @@ app.post("/highlight-cover/:url", async (req, res) => {
         message: "No URL Found",
       });
     } else {
-      const imageBuffer = await axios.get(url, { responseType: "arraybuffer" });
+      const imageBuffer = await axios.get(url, { responseType: "arraybuffer", timeout: 15000 });
 
       const image_base64 = Buffer.from(imageBuffer.data, "binary").toString(
         "base64"
