@@ -1,11 +1,14 @@
 import express from "express";
 import axios from "axios";
 import cors from "cors";
+import axiosRetry from "axios-retry";
 
 const app = express();
 const PORT = 8081;
 
 app.use(cors({ origin: "*" }));
+
+axiosRetry(axios, {retries: 3, retryDelay: axiosRetry.exponentialDelay});
 
 app.post("/user/:username", async (req, res) => {
   try {
